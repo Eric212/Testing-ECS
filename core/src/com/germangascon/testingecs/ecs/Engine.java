@@ -7,21 +7,25 @@ public class Engine implements SystemListener {
     private final EntityManager entityManager;
     private final SystemManager systemManager;
 
+    //Constructor of Engine
     public Engine(int minSystems, int minEntities, int minComponents) {
         entityManager = new EntityManager(minEntities, minComponents);
         systemManager = new SystemManager(this, minSystems);
     }
 
     @Override
+    //Add engine in a system
     public void systemAdded(SystemBase systemBase) {
         systemBase.addedToEngine(this);
     }
 
     @Override
+    //Remove engine in a system
     public void systemRemoved(SystemBase systemBase) {
         systemBase.removedFromEngine();
     }
 
+    //This variant of create entity is if we want an Entity can be use like player
     public Entity createEntity(boolean isPlayer) {
         return entityManager.createEntity(isPlayer);
     }
@@ -30,6 +34,7 @@ public class Engine implements SystemListener {
         entityManager.removeEntity(entity);
     }
 
+    //This variant of create entity always create NPC entities
     public Entity createEntity() {
         return entityManager.createEntity(false);
     }
