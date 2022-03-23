@@ -28,7 +28,8 @@ public class SpawnerSystem extends SystemBase {
             if(currentTime>spawnerComponent.lastSpawn+ spawnerComponent.spawnInterval){
                 Entity entity=getEngine().getEntity(spawnerComponent.getEntityID());
                 TransformComponent transformComponent=entity.getComponent(TransformComponent.class);
-                spawnerComponent.enemyFactory.createEnemy(transformComponent.position.x,transformComponent.position.y,world.player.getComponent(TransformComponent.class).position.x,world.player.getComponent(TransformComponent.class).position.y);
+                world.enemyFactory.createEnemy(spawnerComponent.entityType,transformComponent.position.x,transformComponent.position.y
+                        ,world.player.getComponent(TransformComponent.class).position);
                 spawnerComponent.lastSpawn=currentTime;
             }
         }

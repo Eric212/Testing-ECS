@@ -1,4 +1,4 @@
-package com.germangascon.testingecs.game.factories;
+package com.germangascon.testingecs.game.factories.enemies;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -10,7 +10,7 @@ import com.germangascon.testingecs.game.components.RenderComponent;
 import com.germangascon.testingecs.game.components.TransformComponent;
 import com.germangascon.testingecs.utils.Assets;
 
-public class EnemyRedFactory extends EnemyFactory{
+public class EnemyRedBuilder extends EnemyBuilder {
 
     private static final float ROTATION=270;
     private static final int SCALE=1;
@@ -26,12 +26,12 @@ public class EnemyRedFactory extends EnemyFactory{
     private static final int COOLDOWN_TRIGGER_ANGLE=30;
     private static final float ARRIVAL_RADIUS=5;
 
-    public EnemyRedFactory(Engine engine) {
+    public EnemyRedBuilder(Engine engine) {
         super(engine);
     }
 
     @Override
-    public int spawnEnemy(float positionX, float positionY, float targetX, float targetY) {
+    public int spawnEnemy(float positionX, float positionY, Vector2 target) {
         Entity enemy = getEngine().createEntity();
         TransformComponent transformComponent = getEngine().createComponent(TransformComponent.class);
         RenderComponent renderComponent = getEngine().createComponent(RenderComponent.class);
@@ -52,7 +52,7 @@ public class EnemyRedFactory extends EnemyFactory{
         physicsComponent.acceleration = physicsComponent.acceleration;
         physicsComponent.drag = DRAG;
 
-        aiComponent.target=new Vector2(targetX,targetY);
+        aiComponent.target=target;
         aiComponent.lastPerception=System.currentTimeMillis();
         aiComponent.perceptionRate=PERCEPTION_RATE;
         aiComponent.cooldown=COOLDOWN;

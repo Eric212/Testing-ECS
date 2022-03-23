@@ -1,34 +1,34 @@
 package com.germangascon.testingecs.game;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.germangascon.testingecs.ecs.Engine;
 import com.germangascon.testingecs.ecs.Entity;
-import com.germangascon.testingecs.game.components.AIComponent;
 import com.germangascon.testingecs.game.components.InputComponent;
 import com.germangascon.testingecs.game.components.PhysicsComponent;
 import com.germangascon.testingecs.game.components.RenderComponent;
 import com.germangascon.testingecs.game.components.SpawnerComponent;
 import com.germangascon.testingecs.game.components.TransformComponent;
-import com.germangascon.testingecs.game.factories.EnemyFactory;
-import com.germangascon.testingecs.game.factories.EnemyRedFactory;
+import com.germangascon.testingecs.game.factories.enemies.EnemyBuilder;
+import com.germangascon.testingecs.game.factories.enemies.EnemyFactory;
+import com.germangascon.testingecs.game.factories.enemies.EnemyRedBuilder;
+import com.germangascon.testingecs.game.factories.enemies.EntityType;
 import com.germangascon.testingecs.utils.Assets;
 
 public class World {
     private final Engine engine;
     public Entity player;
-    private EnemyFactory enemyFactory;
+    public final EnemyFactory enemyFactory;
 
     public World(Engine engine) {
         this.engine = engine;
+        this.enemyFactory=EnemyFactory.getInstance(engine);
         init();
     }
 
     private void init() {
         int idPlayer = createPlayer(40, 40);
-        enemyFactory =new EnemyRedFactory(engine);
-        createSpawner();
+        createSpawner(20,500,2000, EntityType.ENEMY_RED_TYPE);
     }
 
     public int createPlayer(float x, float y) {
@@ -94,14 +94,16 @@ public class World {
         bullet.addComponent(physicsComponent);
         return bullet.getId();
     }
-    public int createSpawner(){
+    public int createSpawner(float x, float y, int spawnInterval, EntityType entityType){
         Entity spawner= engine.createEntity();
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         SpawnerComponent spawnerComponent=engine.createComponent(SpawnerComponent.class);
-        transformComponent.position=new Vector2(20,500);
-        spawnerComponent.spawnInterval=1000;
+        transformComponent.position=new Vector2(x,y);
+        transformComponent.rotation=270;
+        transformComponent.scale=1;
+        spawnerComponent.spawnInterval=spawnInterval;
         spawnerComponent.lastSpawn=System.currentTimeMillis();
-        spawnerComponent.enemyFactory=enemyFactory;
+        spawnerComponent.entityType = entityType;
         spawner.addComponent(transformComponent);
         spawner.addComponent(spawnerComponent);
         return spawner.getId();
