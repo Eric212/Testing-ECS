@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.germangascon.testingecs.game.screens.LoadingScreen;
@@ -19,6 +20,7 @@ public class GdxGame extends Game {
 	public static final float ASPECT_RATIO = (float) VIRTUAL_SCREEN_WIDTH / (float) VIRTUAL_SCREEN_HEIGHT;
 	public OrthographicCamera camera;
 	public SpriteBatch batch;
+	public ShapeRenderer shapeRenderer;
 	public Rectangle viewport;
 
 	@Override
@@ -27,6 +29,9 @@ public class GdxGame extends Game {
 		camera.setToOrtho(false, VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(camera.combined);
+		shapeRenderer=new ShapeRenderer();
+		shapeRenderer.setAutoShapeType(true);
+		shapeRenderer.setProjectionMatrix(camera.combined);
 		setScreen(new LoadingScreen(this));
 	}
 
@@ -46,6 +51,7 @@ public class GdxGame extends Game {
 	@Override
 	public void dispose() {
 		batch.dispose();
+		Assets.dispose();
 	}
 
 	@Override

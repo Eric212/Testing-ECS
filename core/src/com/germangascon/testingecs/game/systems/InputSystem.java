@@ -9,6 +9,7 @@ import com.germangascon.testingecs.game.components.InputComponent;
 import com.germangascon.testingecs.game.components.PhysicsComponent;
 import com.germangascon.testingecs.game.components.RenderComponent;
 import com.germangascon.testingecs.game.components.TransformComponent;
+import com.germangascon.testingecs.utils.Config;
 
 import java.util.List;
 
@@ -48,6 +49,14 @@ public class InputSystem extends SystemBase {
                     float originX = (float)(transformComponent.position.x + Math.cos(Math.toRadians(transformComponent.rotation))*(renderComponent.textureRegion.getRegionWidth()));
                     float originY = (float)(transformComponent.position.y + Math.sin(Math.toRadians(transformComponent.rotation))*(renderComponent.textureRegion.getRegionHeight()));
                     world.createBullet(originX, originY, transformComponent.rotation);
+                }
+                if(Gdx.input.isKeyJustPressed(inputComponent.debug)){
+                    if(Config.DEBUG){
+                        Config.DEBUG=false;
+                    }else {
+                        Config.DEBUG = true;
+                    }
+                    System.out.println(Config.DEBUG);
                 }
             }
         }

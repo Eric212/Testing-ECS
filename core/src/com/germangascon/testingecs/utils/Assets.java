@@ -48,4 +48,8 @@ public class Assets {
     private static Texture loadTexture(String fileName) {
         return assetManager.get(fileName, Texture.class);
     }
+    public static void dispose(){
+        assetManager.dispose();
+        font.dispose();
+    }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.germangascon.testingecs.ecs.Engine;
 import com.germangascon.testingecs.ecs.Entity;
+import com.germangascon.testingecs.game.components.ColliderComponent;
 import com.germangascon.testingecs.game.components.InputComponent;
 import com.germangascon.testingecs.game.components.PhysicsComponent;
 import com.germangascon.testingecs.game.components.RenderComponent;
@@ -13,7 +14,9 @@ import com.germangascon.testingecs.game.factories.enemies.EnemyBuilder;
 import com.germangascon.testingecs.game.factories.enemies.EnemyFactory;
 import com.germangascon.testingecs.game.factories.enemies.EnemyRedBuilder;
 import com.germangascon.testingecs.game.factories.enemies.EntityType;
+import com.germangascon.testingecs.game.systems.ColisionSystem;
 import com.germangascon.testingecs.utils.Assets;
+import com.germangascon.testingecs.utils.BoundingBox2D;
 
 public class World {
     private final Engine engine;
@@ -37,6 +40,7 @@ public class World {
         RenderComponent renderComponent = engine.createComponent(RenderComponent.class);
         PhysicsComponent physicsComponent = engine.createComponent(PhysicsComponent.class);
         InputComponent inputComponent = engine.createComponent(InputComponent.class);
+        ColliderComponent colliderComponent=engine.createComponent(ColliderComponent.class);
 
         transformComponent.position = new Vector2(x, y);
         transformComponent.rotation = 90;
@@ -58,11 +62,19 @@ public class World {
         inputComponent.up = Input.Keys.UP;
         inputComponent.down = Input.Keys.DOWN;
         inputComponent.fire = Input.Keys.SPACE;
+        inputComponent.debug= Input.Keys.F12;
+
+        colliderComponent.collided=false;
+        colliderComponent.mask=ColliderComponent.LAYER_ALL;
+        //Union of diferents masks with |
+        colliderComponent.damage=50;
+        colliderComponent.box=new BoundingBox2D(8,Assets.player.getRegionWidth()-9,8,Assets.player.getRegionHeight()-9);
 
         player.addComponent(transformComponent);
         player.addComponent(renderComponent);
         player.addComponent(physicsComponent);
         player.addComponent(inputComponent);
+        player.addComponent(colliderComponent);
         return player.getId();
     }
 
@@ -75,6 +87,7 @@ public class World {
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         RenderComponent renderComponent = engine.createComponent(RenderComponent.class);
         PhysicsComponent physicsComponent = engine.createComponent(PhysicsComponent.class);
+        ColliderComponent colliderComponent =engine.createComponent(ColliderComponent.class);
 
         transformComponent.position = new Vector2(x, y);
         transformComponent.rotation = rotation;
@@ -91,9 +104,16 @@ public class World {
         physicsComponent.maxAcceleration=400f;
         physicsComponent.drag = 0f;
 
+        colliderComponent.collided=false;
+        colliderComponent.mask=ColliderComponent.LAYER_ALL;
+        //Union of diferents masks with |, example: ColliderComponent.LAYER_RED_ENEMY | ColliderComponent.LAYER_BLUE_ENEMY
+        colliderComponent.damage=50;
+        colliderComponent.box=new BoundingBox2D(14,18,14,18);
+
         bullet.addComponent(transformComponent);
         bullet.addComponent(renderComponent);
         bullet.addComponent(physicsComponent);
+        bullet.addComponent(colliderComponent);
         return bullet.getId();
     }
     public int createSpawner(float x, float y, int spawnInterval, EntityType entityType){

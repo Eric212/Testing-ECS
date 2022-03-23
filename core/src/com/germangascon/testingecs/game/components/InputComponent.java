@@ -8,4 +8,5 @@ public class InputComponent extends Component {
     public int up;
     public int down;
     public int fire;
+    public int debug;
 }
