@@ -23,38 +23,42 @@ public class AISystem extends SystemBase {
     @Override
     public void update(float deltaTime) {
         List<AIComponent> aiComponents=getEngine().getComponents(AIComponent.class);
-        if(aiComponents==null){
+        if(aiComponents==null) {
             return;
         }
-        long currentMilis=System.currentTimeMillis();
-        for(AIComponent aiComponent:aiComponents){
+        long currentMillis = System.currentTimeMillis();
+
+        for(AIComponent aiComponent : aiComponents) {
             if(aiComponent.target != null) {
-                //Check perception
-                if (currentMilis > aiComponent.lastCooldown + aiComponent.cooldown || currentMilis > aiComponent.lastPerception + aiComponent.cooldown) {
+                if(currentMillis > aiComponent.lastCooldown + aiComponent.cooldown ||
+                        currentMillis > aiComponent.lastPerception + aiComponent.perceptionRate) {
                     Entity entity = getEngine().getEntity(aiComponent.getEntityID());
                     TransformComponent transformComponent = entity.getComponent(TransformComponent.class);
                     Vector2 target = aiComponent.target.cpy();
                     target.sub(transformComponent.position);
-                    if (currentMilis > aiComponent.lastCooldown + aiComponent.cooldown) {
+                    // Check cooldown
+                    if (currentMillis > aiComponent.lastCooldown + aiComponent.cooldown) {
                         float targetAngle = target.angleDeg();
                         if(Math.abs(transformComponent.rotation-targetAngle)< aiComponent.cooldownTriggerAngle) {
                             RenderComponent renderComponent = entity.getComponent(RenderComponent.class);
-                            float originX = (float) (transformComponent.position.x + Math.cos(Math.toRadians(transformComponent.rotation)) * (renderComponent.textureRegion.getRegionWidth()));
-                            float originY = (float) (transformComponent.position.y + Math.sin(Math.toRadians(transformComponent.rotation)) * (renderComponent.textureRegion.getRegionHeight()));
+                            float originX = transformComponent.position.x + (float) (Math.cos(Math.toRadians(transformComponent.rotation)) * (renderComponent.textureRegion.getRegionWidth()));
+                            float originY = transformComponent.position.y + (float) (Math.sin(Math.toRadians(transformComponent.rotation)) * (renderComponent.textureRegion.getRegionHeight()));
                             world.createBullet(originX, originY, transformComponent.rotation);
-                            aiComponent.lastCooldown = currentMilis;
+                            aiComponent.lastCooldown = currentMillis;
                         }
                     }
-                    if (currentMilis > aiComponent.lastPerception + aiComponent.perceptionRate) {
-                        //ToDo: Homework
-                        //Apply estrategy in progres / Pursue
+                    // Check perception
+                    if (currentMillis > aiComponent.lastPerception + aiComponent.perceptionRate) {
+                        // Apply estrategy / Pursue
                         PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
 
                         float linearVelocity = target.len();
+
                         if (linearVelocity < aiComponent.arrivalRadius) {
 
                         }
-                        linearVelocity = MathUtils.clamp(linearVelocity, 0, physicsComponent.maxLinearVelocity);
+                        // linearVelocity = MathUtils.clamp(linearVelocity, 0, physicsComponent.maxLinearVelocity);
+                        float acceleration = physicsComponent.maxAcceleration;
 
                         float targetAngle = target.angleDeg();
                         float angularVelocity = targetAngle - transformComponent.rotation;
@@ -66,10 +70,10 @@ public class AISystem extends SystemBase {
 
 
                         angularVelocity = MathUtils.clamp(angularVelocity, -physicsComponent.maxAngularVelocity, physicsComponent.maxAngularVelocity);
-                        physicsComponent.linearVelocity = linearVelocity;
+                        physicsComponent.acceleration = acceleration;
                         physicsComponent.angularVelocity = angularVelocity;
 
-                        aiComponent.lastPerception = currentMilis;
+                        aiComponent.lastPerception = currentMillis;
                     }
                 }
             }

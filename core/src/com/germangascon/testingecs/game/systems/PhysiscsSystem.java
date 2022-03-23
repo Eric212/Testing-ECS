@@ -27,6 +27,10 @@ public class PhysiscsSystem extends SystemBase {
             if(transformComponent.rotation < 0)
                 transformComponent.rotation += 360;
 
+            float drag= physicsComponent.linearVelocity*physicsComponent.drag *deltaTime;
+            physicsComponent.linearVelocity-=drag;
+            physicsComponent.linearVelocity+=physicsComponent.acceleration*deltaTime;
+            physicsComponent.linearVelocity=MathUtils.clamp(physicsComponent.linearVelocity,-physicsComponent.maxLinearVelocity,physicsComponent.maxLinearVelocity);
             physicsComponent.velocity.x = (float) (physicsComponent.linearVelocity * Math.cos(Math.toRadians(transformComponent.rotation)));
             physicsComponent.velocity.y = (float) (physicsComponent.linearVelocity * Math.sin(Math.toRadians(transformComponent.rotation)));
 

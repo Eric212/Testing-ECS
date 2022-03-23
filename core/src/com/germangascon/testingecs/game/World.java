@@ -44,13 +44,14 @@ public class World {
 
         renderComponent.textureRegion = Assets.player;
 
-        physicsComponent.maxLinearVelocity = 200f;
-        physicsComponent.linearVelocity = physicsComponent.maxLinearVelocity;
+        physicsComponent.maxLinearVelocity = 250f;
+        physicsComponent.linearVelocity = 0;
         physicsComponent.angularVelocity = 0;
         physicsComponent.maxAngularVelocity = 180f;
 
-        physicsComponent.acceleration = new Vector2(0f, 50f);
-        physicsComponent.drag = 30f;
+        physicsComponent.acceleration = 0;
+        physicsComponent.maxAcceleration = 200f;
+        physicsComponent.drag = 1.2f;
 
         inputComponent.left = Input.Keys.LEFT;
         inputComponent.right = Input.Keys.RIGHT;
@@ -86,7 +87,8 @@ public class World {
         physicsComponent.angularVelocity = 0;
         physicsComponent.maxAngularVelocity = 300;
 
-        physicsComponent.acceleration = new Vector2(0, 0);
+        physicsComponent.acceleration=0;
+        physicsComponent.maxAcceleration=400f;
         physicsComponent.drag = 0f;
 
         bullet.addComponent(transformComponent);

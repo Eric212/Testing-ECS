@@ -11,8 +11,8 @@ public class PhysicsComponent extends Component {
     /** Angular velocity */
     public float angularVelocity;
     public float maxAngularVelocity;
-
-    // TODO: on next iteration
-    public Vector2 acceleration;
+    //Acceleration
+    public float acceleration;
+    public float maxAcceleration;
     public float drag;
 }

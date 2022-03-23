@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SpawnerSystem extends SystemBase {
 
-    private World world;
+    private final World world;
 
     public SpawnerSystem(int priority, World world) {
         super(priority);

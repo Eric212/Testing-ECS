@@ -26,8 +26,8 @@ public class InputSystem extends SystemBase {
         for (InputComponent inputComponent : inputComponents) {
             Entity entity = getEngine().getEntity(inputComponent.getEntityID());
             PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
-            physicsComponent.linearVelocity=0;
             physicsComponent.angularVelocity=0;
+            physicsComponent.acceleration=0;
             if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
                 if (Gdx.input.isKeyPressed(inputComponent.left)) {
                     physicsComponent.angularVelocity = 360;
@@ -36,10 +36,10 @@ public class InputSystem extends SystemBase {
                     physicsComponent.angularVelocity = -360;
                 }
                 if (Gdx.input.isKeyPressed(inputComponent.up)) {
-                    physicsComponent.linearVelocity = physicsComponent.maxLinearVelocity;
+                    physicsComponent.acceleration = physicsComponent.maxAcceleration;
                 }
                 if (Gdx.input.isKeyPressed(inputComponent.down)) {
-                    physicsComponent.linearVelocity = -physicsComponent.maxLinearVelocity;
+                    physicsComponent.acceleration = -physicsComponent.maxAcceleration;
                 }
                 if (Gdx.input.isKeyJustPressed(inputComponent.fire)) {
                     TransformComponent transformComponent = entity.getComponent(TransformComponent.class);
